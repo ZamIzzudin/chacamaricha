@@ -13,7 +13,7 @@ function App() {
 
   // Encrypt state
   const [encryptInput, setEncryptInput] = useState(
-    JSON.stringify({ text: "2026-07-02T02:09:01.036Z" }, null, 2)
+    "2026-07-02T02:09:01.036Z"
   );
   const [encryptOutput, setEncryptOutput] = useState("");
   const [encryptError, setEncryptError] = useState("");
@@ -46,8 +46,8 @@ function App() {
     }
 
     try {
-      const payload = JSON.parse(encryptInput);
-      const result = encryptChacha(JSON.stringify(payload), secretKey);
+      const payload = JSON.stringify(encryptInput.trim());
+      const result = encryptChacha(payload, secretKey);
       setEncryptOutput(result);
     } catch (err) {
       setEncryptError(
@@ -73,7 +73,7 @@ function App() {
     try {
       const result = decryptChacha(decryptInput.trim(), secretKey);
       const parsed = JSON.parse(result);
-      setDecryptOutput(JSON.stringify(parsed, null, 2));
+      setDecryptOutput(typeof parsed === "string" ? parsed : JSON.stringify(parsed, null, 2));
     } catch (err) {
       setDecryptError(
         err instanceof Error ? err.message : "Decryption failed"
@@ -163,10 +163,10 @@ function App() {
               {/* Input Panel */}
               <div className="flex-1 space-y-3">
                 <Label className="block text-xs uppercase tracking-wider text-muted-foreground">
-                  Input (JSON Payload)
+                  Input (Plain Text)
                 </Label>
                 <Textarea
-                  placeholder='{"text": "2026-07-02T02:09:01.036Z"}'
+                  placeholder="Enter any string, e.g. 2026-07-02T02:09:01.036Z"
                   value={encryptInput}
                   onChange={(e) => setEncryptInput(e.target.value)}
                   className="min-h-[160px] font-mono text-xs"
@@ -253,7 +253,7 @@ function App() {
               <div className="flex-1 space-y-3">
                 <div className="flex items-center justify-between">
                   <Label className="text-xs uppercase tracking-wider text-muted-foreground">
-                    Decrypted Output (JSON)
+                    Decrypted Output
                   </Label>
                   {decryptOutput && (
                     <Button
