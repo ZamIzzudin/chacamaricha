@@ -46,8 +46,7 @@ function App() {
     }
 
     try {
-      const payload = JSON.stringify(encryptInput.trim());
-      const result = encryptChacha(payload, secretKey);
+      const result = encryptChacha(encryptInput.trim(), secretKey);
       setEncryptOutput(result);
     } catch (err) {
       setEncryptError(
@@ -72,8 +71,7 @@ function App() {
 
     try {
       const result = decryptChacha(decryptInput.trim(), secretKey);
-      const parsed = JSON.parse(result);
-      setDecryptOutput(typeof parsed === "string" ? parsed : JSON.stringify(parsed, null, 2));
+      setDecryptOutput(result);
     } catch (err) {
       setDecryptError(
         err instanceof Error ? err.message : "Decryption failed"
